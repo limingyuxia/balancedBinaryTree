@@ -23,10 +23,10 @@ static int print(struct Data *treeData)
 
 int main()
 {
-    int idxArr[] = {1, 9, 4, 56, 34, 24, 76, 10};
+    int idxArr[] = {1, 2, 3, 7, 6, 5, 9, 8, 4};
     int i;
     struct Data drugData;
-    bTree *treeRoot;
+    bTree *treeRoot = NULL; // 指针初始化为NULL，防止指向一块未知的空间
 
     for (i = 0; i < sizeof(idxArr) / sizeof(*idxArr); i++)
     {
@@ -36,14 +36,17 @@ int main()
         treeInsert(&treeRoot, &drugData, idxArr[i], sizeof(struct Data));
     }
 
-    int idx = 24;
-    bTree *treeNode;
+    int idx = 6;
+    bTree *treeNode = NULL;
     treeSearch(treeRoot, idx, &treeNode);
     if (NULL != treeNode)
     {
         struct Data *drugNode = treeNode->data;
         print(drugNode);
     }
+
+    // 根节点从左边第0个字符开始打印
+    treeDraw(treeRoot, 0);
 
     return 0;
 }

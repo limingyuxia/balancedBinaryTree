@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 #include "bTree.h"
 
@@ -58,6 +59,7 @@ int treeSearch(bTree *tree, int idx, bTree **node)
         return -1;
     }
 
+    // 索引比较
     if (tree->idx == idx)
     {
         *node = tree;
@@ -70,4 +72,26 @@ int treeSearch(bTree *tree, int idx, bTree **node)
     }
 
     return treeSearch(tree->left, idx, node);
+}
+
+void treeDraw(bTree *tree, int level)
+{
+    int i;
+
+    // 遍历到叶子节点的左右子树
+    if (NULL == tree)
+        return;
+
+    // 树向左倒，先画右子树，再画根节点，在画左子树
+    treeDraw(tree->right, level + 1);
+
+    // 画节点之前，根据节点所在的层数，打印分割符
+    for (i = 0; i < level; i++)
+        printf("\t");
+
+    //sleep(1);
+    printf("%d\n\n", tree->idx);
+
+    // 找到第一个要画的节点以后，还要找下一个，所以不return
+    treeDraw(tree->left, level + 1);
 }
