@@ -18,4 +18,7 @@ int treeSearch(bTree *, int, bTree **);
 // 绘画树
 void treeDraw(bTree *, int);
 
+// 平衡树
+void treeBalance(bTree **);
+
 #endif

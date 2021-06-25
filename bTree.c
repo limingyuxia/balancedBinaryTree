@@ -74,6 +74,7 @@ int treeSearch(bTree *tree, int idx, bTree **node)
     return treeSearch(tree->left, idx, node);
 }
 
+// 绘画树
 void treeDraw(bTree *tree, int level)
 {
     int i;
@@ -94,4 +95,100 @@ void treeDraw(bTree *tree, int level)
 
     // 找到第一个要画的节点以后，还要找下一个，所以不return
     treeDraw(tree->left, level + 1);
+}
+
+// 获取根节点左子树或者右子树节点的数量
+static int getNodeNum(bTree *tree)
+{
+    if (NULL == tree)
+    {
+        return 0;
+    }
+
+    // 递归叶子节点的左子树，根节点和右子树
+    return getNodeNum(tree->left) + 1 + getNodeNum(tree->right);
+}
+
+static bTree *maxLeftDepth(bTree *tree)
+{
+    if (NULL == tree->left)
+    {
+        return tree;
+    }
+
+    return maxLeftDepth(tree->left);
+}
+
+static bTree *maxRightDepth(bTree *tree)
+{
+    if (NULL == tree->right)
+    {
+        return tree;
+    }
+
+    return maxRightDepth(tree->right);
+}
+
+// 左旋
+static int turnLeft(bTree **tree)
+{
+    bTree *root = *tree;    // 记录根节点
+    *tree = (*tree)->right; // 根子树的右子树的根节点变为新的根节点
+    root->right = NULL;     // 旧根节点断开右子树
+
+    bTree *leftNode;
+    leftNode = maxLeftDepth(*tree); // 找到新的根节点最深的左子树节点
+    leftNode->left = root;
+
+    return 0;
+}
+
+// 右旋
+static int turnRight(bTree **tree)
+{
+    bTree *root = *tree;
+    (*tree) = (*tree)->left;
+    root->left = NULL;
+
+    bTree *rightNode;
+    rightNode = maxRightDepth(*tree); // 找到新的根节点最深的左子树节点
+    rightNode->right = root;
+
+    return 0;
+}
+
+// 平衡树
+void treeBalance(bTree **tree)
+{
+    int sub = 0;
+    if (NULL == *tree)
+    {
+        // 递归到叶子节点的左右子树
+        return;
+    }
+
+    while (1)
+    {
+        // 根节点的左子树节点的个数和右子树节点的个数，差值为1，认为树平衡
+        sub = getNodeNum((*tree)->left) - getNodeNum((*tree)->right);
+        if (sub >= -1 && sub <= 1)
+        {
+            break;
+        }
+        // 左旋：当前节点的右子树作为根节点。左子树作为新根节点的左子树
+        else if (sub < -1)
+        {
+            turnLeft(tree);
+        }
+        // 右旋：当前节点的左子树作为根节点。右子树作为新根节点的右子树
+        else if (sub > 1)
+        {
+            turnRight(tree);
+        }
+    }
+
+    // 根节点平衡好以后，平衡左右子树
+    treeBalance(&(*tree)->left);
+
+    treeBalance(&(*tree)->right);
 }

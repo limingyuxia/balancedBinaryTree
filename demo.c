@@ -48,5 +48,9 @@ int main()
     // 根节点从左边第0个字符开始打印
     treeDraw(treeRoot, 0);
 
+    treeBalance(&treeRoot);
+
+    treeDraw(treeRoot, 0);
+
     return 0;
 }
