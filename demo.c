@@ -23,7 +23,7 @@ static int print(struct Data *treeData)
 
 int main()
 {
-    int idxArr[] = {1, 2, 3, 7, 6, 5, 9, 8, 4};
+    int idxArr[] = {1, 2, 3, 7, 6, 5, 9, 8, 4, 15, 29, 17, 23};
     int i;
     struct Data drugData;
     bTree *treeRoot = NULL; // 指针初始化为NULL，防止指向一块未知的空间
@@ -36,9 +36,9 @@ int main()
         treeInsert(&treeRoot, &drugData, idxArr[i], sizeof(struct Data));
     }
 
-    int idx = 6;
+    int idx = 3;
     bTree *treeNode = NULL;
-    treeSearch(treeRoot, idx, &treeNode);
+    treeNode = treeSearch(treeRoot, idx);
     if (NULL != treeNode)
     {
         struct Data *drugNode = treeNode->data;
@@ -48,9 +48,17 @@ int main()
     // 根节点从左边第0个字符开始打印
     treeDraw(treeRoot, 0);
 
+    // 平衡二叉树
     treeBalance(&treeRoot);
-
+    printf("\n\n\n");
     treeDraw(treeRoot, 0);
+
+    // 删除索引为3的节点
+    if (treeDelete(&treeRoot, idx) == 0)
+    {
+        printf("\n\n\n");
+        treeDraw(treeRoot, 0);
+    }
 
     return 0;
 }

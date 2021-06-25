@@ -13,12 +13,15 @@ typedef struct BinaryTree
 int treeInsert(bTree **, void *, int, int);
 
 // 查找节点
-int treeSearch(bTree *, int, bTree **);
+bTree *treeSearch(bTree *, int);
 
 // 绘画树
 void treeDraw(bTree *, int);
 
 // 平衡树
 void treeBalance(bTree **);
+
+// 删除节点
+int treeDelete(bTree **, int);
 
 #endif

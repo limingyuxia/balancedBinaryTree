@@ -52,26 +52,26 @@ int treeInsert(bTree **tree, void *data, int idx, int dataSize)
 }
 
 // 查找节点
-int treeSearch(bTree *tree, int idx, bTree **node)
+bTree *treeSearch(bTree *tree, int idx)
 {
     if (NULL == tree)
     {
-        return -1;
+        // 遍历到叶子节点的左右子树
+        return NULL;
     }
 
     // 索引比较
     if (tree->idx == idx)
     {
-        *node = tree;
-        return 0;
+        return tree;
     }
 
     if (idx > tree->idx)
     {
-        return treeSearch(tree->right, idx, node);
+        return treeSearch(tree->right, idx);
     }
 
-    return treeSearch(tree->left, idx, node);
+    return treeSearch(tree->left, idx);
 }
 
 // 绘画树
@@ -140,6 +140,11 @@ static int turnLeft(bTree **tree)
     leftNode = maxLeftDepth(*tree); // 找到新的根节点最深的左子树节点
     leftNode->left = root;
 
+    // 绘制树平衡的过程
+    // getchar();
+    // printf("-------------------------\n");
+    // treeDraw(*tree, 0);
+
     return 0;
 }
 
@@ -153,6 +158,10 @@ static int turnRight(bTree **tree)
     bTree *rightNode;
     rightNode = maxRightDepth(*tree); // 找到新的根节点最深的左子树节点
     rightNode->right = root;
+
+    // getchar();
+    // printf("-------------------------\n");
+    // treeDraw(*tree, 0);
 
     return 0;
 }
@@ -191,4 +200,41 @@ void treeBalance(bTree **tree)
     treeBalance(&(*tree)->left);
 
     treeBalance(&(*tree)->right);
+}
+
+// 删除节点
+int treeDelete(bTree **tree, int idx)
+{
+    bTree **deleteNode = tree;
+    // 指向根节点的指针移动到要删除的节点上
+    while (*deleteNode != NULL && (*deleteNode)->idx != idx)
+    {
+        if (idx < (*deleteNode)->idx)
+            deleteNode = &(*deleteNode)->left;
+        else
+            deleteNode = &(*deleteNode)->right;
+    }
+    if (NULL == *deleteNode)
+    {
+        return -1;
+    }
+
+    bTree *cur = *deleteNode;
+    // 要删除节点，左子树的根节点，覆盖当前节点
+    if (NULL == cur->left)
+    {
+        *deleteNode = cur->right;
+    }
+    else
+    {
+        *deleteNode = cur->left;
+        bTree *rightNode;
+        rightNode = maxRightDepth(cur->left);
+        rightNode->right = cur->right;
+    }
+
+    free(cur);
+    free(cur->data);
+
+    return 0;
 }
