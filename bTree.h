@@ -13,7 +13,7 @@ typedef struct BinaryTree
 int treeInsert(bTree **, void *, int, int);
 
 // 查找节点
-bTree *treeSearch(bTree *, int);
+int treeSearch(bTree *, int, bTree **);
 
 // 绘画树
 void treeDraw(bTree *, int);
@@ -23,5 +23,8 @@ void treeBalance(bTree **);
 
 // 删除节点
 int treeDelete(bTree **, int);
+
+// 中序遍历
+void treeTravel(bTree *);
 
 #endif

@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <uuid/uuid.h>
 #include <time.h>
 
 #include "bTree.h"
@@ -30,7 +29,7 @@ int main()
 
     for (i = 0; i < sizeof(idxArr) / sizeof(*idxArr); i++)
     {
-        uuid_generate(&drugData.drugCode);
+        drugData.drugCode = idxArr[i] + rand() % 100;
         snprintf(drugData.drugName, NAMESIZE, "drug_%ld", time(NULL) - idxArr[i]);
 
         treeInsert(&treeRoot, &drugData, idxArr[i], sizeof(struct Data));
@@ -38,7 +37,7 @@ int main()
 
     int idx = 3;
     bTree *treeNode = NULL;
-    treeNode = treeSearch(treeRoot, idx);
+    treeSearch(treeRoot, idx, &treeNode);
     if (NULL != treeNode)
     {
         struct Data *drugNode = treeNode->data;
@@ -59,6 +58,9 @@ int main()
         printf("\n\n\n");
         treeDraw(treeRoot, 0);
     }
+
+    treeTravel(treeRoot);
+    printf("\n");
 
     return 0;
 }

@@ -52,26 +52,27 @@ int treeInsert(bTree **tree, void *data, int idx, int dataSize)
 }
 
 // 查找节点
-bTree *treeSearch(bTree *tree, int idx)
+int treeSearch(bTree *tree, int idx, bTree **node)
 {
     if (NULL == tree)
     {
         // 遍历到叶子节点的左右子树
-        return NULL;
+        return 0;
     }
 
     // 索引比较
     if (tree->idx == idx)
     {
-        return tree;
+        *node = tree;
+        return 0;
     }
 
     if (idx > tree->idx)
     {
-        return treeSearch(tree->right, idx);
+        return treeSearch(tree->right, idx, node);
     }
 
-    return treeSearch(tree->left, idx);
+    return treeSearch(tree->left, idx, node);
 }
 
 // 绘画树
@@ -237,4 +238,22 @@ int treeDelete(bTree **tree, int idx)
     free(cur->data);
 
     return 0;
+}
+
+// 先序遍历  - 根左右的顺序
+// 中序遍历  - 左根右的顺序
+// 后序遍历  - 左右根的顺序
+void treeTravel(bTree *tree)
+{
+    if (NULL == tree)
+    {
+        return;
+    }
+
+    printf("%d ", tree->idx);
+    fflush(stdout);
+
+    treeTravel(tree->left);
+
+    treeTravel(tree->right);
 }
