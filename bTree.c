@@ -6,6 +6,12 @@
 #include "bTree.h"
 
 // 插入节点
+/*
+    tree 根节点
+    data 节点中的数据
+    idx  节点的索引
+    dataSize 一次插入节点的个数
+*/
 int treeInsert(bTree **tree, void *data, int idx, int dataSize)
 {
     bTree *treeNode = NULL;
@@ -52,6 +58,11 @@ int treeInsert(bTree **tree, void *data, int idx, int dataSize)
 }
 
 // 查找节点
+/*
+    tree 树的根节点
+    idx  要查找节点的索引
+    node 找到的节点
+*/
 int treeSearch(bTree *tree, int idx, bTree **node)
 {
     if (NULL == tree)
@@ -76,6 +87,10 @@ int treeSearch(bTree *tree, int idx, bTree **node)
 }
 
 // 绘画树
+/*
+    tree  树的根节点
+    level 根节点距离终端左边界的距离
+*/
 void treeDraw(bTree *tree, int level)
 {
     int i;
@@ -204,6 +219,10 @@ void treeBalance(bTree **tree)
 }
 
 // 删除节点
+/*
+    tree 树的根节点
+    idx  要删除节点的索引
+*/
 int treeDelete(bTree **tree, int idx)
 {
     bTree **deleteNode = tree;
