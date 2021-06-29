@@ -240,9 +240,9 @@ int treeDelete(bTree **tree, int idx)
     return 0;
 }
 
-// 先序遍历  - 根左右的顺序
-// 中序遍历  - 左根右的顺序
-// 后序遍历  - 左右根的顺序
+// 先序遍历 - 根左右的顺序
+// 中序遍历 - 左根右的顺序
+// 后序遍历 - 左右根的顺序
 void treeTravel(bTree *tree)
 {
     if (NULL == tree)
@@ -256,4 +256,69 @@ void treeTravel(bTree *tree)
     treeTravel(tree->left);
 
     treeTravel(tree->right);
+}
+
+// 树的按层遍历
+int treeTravelLevel(bTree *tree, int idxLen)
+{
+    // 使用队列存放节点
+    typedef struct
+    {
+        int *idx;
+        int head, tail;
+    } idxQueue;
+
+    idxQueue *queue = malloc(sizeof(idxQueue));
+    if (NULL == queue)
+    {
+        perror("malloc: ");
+        return -1;
+    }
+    // 头所在的位置不放数据
+    queue->idx = malloc(sizeof(int) * idxLen);
+    if (NULL == queue->idx)
+    {
+        perror("malloc: ");
+        return -1;
+    }
+    queue->head = queue->tail = 0;
+
+    queue->tail = (queue->tail + 1) % idxLen;
+    queue->idx[queue->tail] = tree->idx; // 根节点入队
+    bTree *node;
+    int isRoot = 1;
+
+    while (1)
+    {
+        // 遍历完成树所有的节点
+        if ((queue->head == queue->tail) && (isRoot == 0))
+            break;
+        isRoot = 0;
+
+        queue->head = (queue->head + 1) % idxLen;
+        printf("%d ", queue->idx[queue->head]);
+        fflush(stdout);
+        if ((queue->tail + 1) % idxLen == queue->head)
+            break;
+
+        // 根节点出队
+        treeSearch(tree, queue->idx[queue->head], &node);
+
+        // 根节点有左节点就入队
+        if (NULL != node->left)
+        {
+            queue->tail = (queue->tail + 1) % idxLen;
+            queue->idx[queue->tail] = node->left->idx;
+        }
+        // 根节点有右节点就入队
+        if (NULL != node->right)
+        {
+            queue->tail = (queue->tail + 1) % idxLen;
+            queue->idx[queue->tail] = node->right->idx;
+        }
+    }
+    free(queue);
+    free(queue->idx);
+
+    return 0;
 }

@@ -62,5 +62,8 @@ int main()
     treeTravel(treeRoot);
     printf("\n");
 
+    treeTravelLevel(treeRoot, sizeof(idxArr) / sizeof(*idxArr));
+    printf("\n");
+
     return 0;
 }

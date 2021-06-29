@@ -24,7 +24,10 @@ void treeBalance(bTree **);
 // 删除节点
 int treeDelete(bTree **, int);
 
-// 中序遍历
+// 树的遍历
 void treeTravel(bTree *);
+
+// 树的按层遍历
+int treeTravelLevel(bTree *, int);
 
 #endif
